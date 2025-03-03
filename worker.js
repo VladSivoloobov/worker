@@ -1,4 +1,4 @@
-import PageTransformer from './src/page-changer.js';
+import PageTransformer from './src/page-transformer.js';
 import HttpStatusHandler from './src/server-statuses.js';
 
 /**
@@ -21,8 +21,7 @@ async function main(request) {
   const pageTransformer = new PageTransformer();
 
   const output =
-    statusHandler.checkHttpStatus(url) ||
-    pageTransformer.transformPage(response);
+    statusHandler.checkHttpStatus() || pageTransformer.transformPage(response);
 
   return output;
 }

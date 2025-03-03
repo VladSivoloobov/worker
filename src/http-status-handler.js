@@ -6,7 +6,7 @@ class HttpStatusHandler {
    * @param {URL} url - The URL object to process.
    * @param {boolean} keepWWW - Whether to keep the "www." prefix in the host.
    */
-  constructor(url, keepWWW) {
+  constructor(url, keepWWW = false) {
     this.url = new URL(url);
     this.url.host = keepWWW ? this.url.host : this.url.host.replace('www.', '');
 

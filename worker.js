@@ -1,5 +1,5 @@
 import PageTransformer from './src/page-transformer.js';
-import HttpStatusHandler from './src/server-statuses.js';
+import HttpStatusHandler from './src/http-status-handler.js';
 
 /**
  * @constant

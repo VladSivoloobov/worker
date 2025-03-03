@@ -1,4 +1,7 @@
 class ExternalLinksHandler {
+  /**
+   * @readonly
+   */
   #EXCEPTION_LINKS = [
     'google',
     'twitter',
@@ -12,6 +15,9 @@ class ExternalLinksHandler {
     'yelp',
   ];
 
+  /**
+   * @readonly
+   */
   #relAttribute = 'nofollow noopener noreferrer';
 
   async element(element) {

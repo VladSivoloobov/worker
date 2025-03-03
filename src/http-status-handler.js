@@ -9,7 +9,8 @@ class HttpStatusHandler {
   constructor(url, keepWWW) {
     this.url = new URL(url);
     this.url.host = keepWWW ? this.url.host : this.url.host.replace('www.', '');
-    this.fullPath = `${this.url.pathname}${this.url.search}`;
+
+    this.fullPath = this.url.pathname + this.url.search;
   }
 
   /**
@@ -24,7 +25,8 @@ class HttpStatusHandler {
 
   /**
    * Checks for a 410 Gone status.
-   * @returns {Response | undefined} - A 410 response if matched, otherwise undefined.
+   * @returns {Response | undefined} - A 410 response if matched,
+   *                                   otherwise undefined.
    */
   #handleGoneStatus() {
     const matched = goneList.find((path) =>
@@ -38,7 +40,8 @@ class HttpStatusHandler {
 
   /**
    * Checks for a 301 Redirect status.
-   * @returns {Response | undefined} - A 301 redirect response if matched, otherwise undefined.
+   * @returns {Response | undefined} - A 301 redirect response if matched,
+   *                                   otherwise undefined.
    */
   #handleRedirectStatus() {
     const matched = redirectList.find(({ from }) =>
@@ -53,10 +56,14 @@ class HttpStatusHandler {
 
   /**
    * Checks the URL for 301 or 410 statuses.
-   * @returns {Response | undefined} - A response if a status is matched, otherwise undefined.
+   * @returns {Response | undefined} - A response if a status is matched,
+   *                                   otherwise undefined.
    */
   checkHttpStatus() {
-    return this.#handleRedirectStatus() || this.#handleGoneStatus();
+    const goneStatus = this.#handleGoneStatus();
+    const redirectStatus = this.#handleRedirectStatus();
+
+    return redirectStatus || goneStatus;
   }
 }
 

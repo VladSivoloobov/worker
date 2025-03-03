@@ -38,7 +38,9 @@ class PageTransformer {
    */
   transformPage(response) {
     const withUpdatedLinks = this.#updateExternalLinks(response);
-    return this.#removeInvisibleElements(withUpdatedLinks);
+    const removedInvisible = this.#removeInvisibleElements(withUpdatedLinks);
+
+    return removedInvisible;
   }
 }
 

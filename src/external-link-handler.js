@@ -16,11 +16,14 @@ class ExternalLinksHandler {
 
   async element(element) {
     const href = element.getAttribute('href');
-    this.#EXCEPTION_LINKS.forEach((link) => {
-      if (!href.includes(link)) {
-        element.setAttribute('rel', this.#relAttribute);
-      }
-    });
+
+    const isException = this.#EXCEPTION_LINKS.find((link) =>
+      href.includes(link)
+    );
+
+    if (!isException) return;
+
+    element.setAttribute('rel', this.#relAttribute);
   }
 }
 

@@ -25,13 +25,13 @@ class PageTransformer {
 
     return new HTMLRewriter()
       .on(selector, {
-        element: (element) => element.remove(),
+        element: async (element) => void element.remove(),
       })
       .transform(response);
   }
 
   /**
-   * Cleans the page by applying all transformations (modifying links and removing hidden elements).
+   * Cleans the page by applying all transformations.
    *
    * @param {Response} response - Original HTTP response.
    * @returns {Response} Fully transformed response.

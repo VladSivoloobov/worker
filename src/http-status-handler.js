@@ -30,9 +30,10 @@ class HttpStatusHandler {
     const matched = goneList.find((path) =>
       this.#arePathsMatching(path, this.fullPath)
     );
-    if (matched) {
-      return new Response(page410, { status: 410 });
-    }
+
+    if (!matched) return;
+
+    return new Response(page410, { status: 410 });
   }
 
   /**
@@ -44,10 +45,10 @@ class HttpStatusHandler {
       this.#arePathsMatching(from, this.fullPath)
     );
 
-    if (matched) {
-      const redirectUrl = new URL(matched.to, this.url.origin);
-      return Response.redirect(redirectUrl.href, 301);
-    }
+    if (!matched) return;
+
+    const redirectUrl = new URL(matched.to, this.url.origin);
+    return Response.redirect(redirectUrl.href, 301);
   }
 
   /**

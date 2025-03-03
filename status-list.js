@@ -1,11 +1,11 @@
 /**
  * @constant
- * @type {string[]}
+ * @type {Array<string>}
  */
 export const goneList = [];
 
 /**
  * @constant
- * @type {{from: string, to: string}[]}
+ * @type {Array<{from: string, to: string}>}
  */
 export const redirectList = [];

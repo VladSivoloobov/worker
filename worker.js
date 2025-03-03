@@ -1,10 +1,10 @@
-import PageTransformer from './src/page-changer';
-import HttpStatusHandler from './src/server-statuses';
+import PageTransformer from './src/page-changer.js';
+import HttpStatusHandler from './src/server-statuses.js';
 
 /**
  * @constant
  * @type {boolean}
- * @description If url must have 'www', set this variables to true
+ * @description If url must have 'www', set this variable to true
  */
 const keepWWW = false;
 

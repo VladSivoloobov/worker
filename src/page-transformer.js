@@ -1,5 +1,4 @@
 import ExternalLinksHandler from './external-link-handler.js';
-import RemoveElementHandler from './remove-element-handler.js';
 
 class PageTransformer {
   /**
@@ -23,9 +22,12 @@ class PageTransformer {
    */
   #removeInvisibleElements(response) {
     const selector = '.w-condition-invisible';
-    const handler = new RemoveElementHandler();
 
-    return new HTMLRewriter().on(selector, handler).transform(response);
+    return new HTMLRewriter()
+      .on(selector, {
+        element: (element) => element.remove(),
+      })
+      .transform(response);
   }
 
   /**

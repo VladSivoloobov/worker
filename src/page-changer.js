@@ -1,14 +1,14 @@
-import ExternalLinksHandler from './external-link-handler';
-import RemoveElementHandler from './remove-element-handler';
+import ExternalLinksHandler from './external-link-handler.js';
+import RemoveElementHandler from './remove-element-handler.js';
 
-class PageChanger {
+class PageTransformer {
   /**
    * Adds `rel="noopener noreferrer"` to external links.
    *
    * @param {Response} response - Original HTTP response.
    * @returns {Response} Transformed response with updated links.
    */
-  static #modifyExternalLinks(response) {
+  #updateExternalLinks(response) {
     const selector = `a[target="_blank"]:not([rel])`;
     const handler = new ExternalLinksHandler();
 
@@ -21,7 +21,7 @@ class PageChanger {
    * @param {Response} response - Original HTTP response.
    * @returns {Response} Transformed response with hidden elements removed.
    */
-  static #removeHiddenElements(response) {
+  #removeInvisibleElements(response) {
     const selector = '.w-condition-invisible';
     const handler = new RemoveElementHandler();
 
@@ -34,10 +34,10 @@ class PageChanger {
    * @param {Response} response - Original HTTP response.
    * @returns {Response} Fully transformed response.
    */
-  static cleanPage(response) {
-    const withModifiedLinks = this.#modifyExternalLinks(response);
-    return this.#removeHiddenElements(withModifiedLinks);
+  transformPage(response) {
+    const withUpdatedLinks = this.#updateExternalLinks(response);
+    return this.#removeInvisibleElements(withUpdatedLinks);
   }
 }
 
-export default PageChanger;
+export default PageTransformer;

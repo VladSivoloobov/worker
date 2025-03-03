@@ -1,34 +1,34 @@
-import { list301, list410 } from '../status-list.js';
+import { redirectList, goneList } from '../status-list.js';
 import page410 from '/page410.html';
 
-class ServerStatuses {
+class HttpStatusHandler {
   /**
    * @param {URL} url - The URL object to process.
-   * @param {boolean} isWWW - Whether to keep the "www." prefix in the host.
+   * @param {boolean} keepWWW - Whether to keep the "www." prefix in the host.
    */
-  constructor(url, isWWW) {
+  constructor(url, keepWWW) {
     this.url = new URL(url);
-    this.url.host = isWWW ? this.url.host : this.url.host.replace('www.', '');
-    this.pathname = `${this.url.pathname}${this.url.search}`;
+    this.url.host = keepWWW ? this.url.host : this.url.host.replace('www.', '');
+    this.fullPath = `${this.url.pathname}${this.url.search}`;
   }
 
   /**
-   * Checks if two pathnames match (ignoring slashes).
-   * @param {string} path1 - First pathname.
-   * @param {string} path2 - Second pathname.
-   * @returns {boolean} - True if pathnames match.
+   * Checks if two paths match (ignoring slashes).
+   * @param {string} pathA - First path.
+   * @param {string} pathB - Second path.
+   * @returns {boolean} - True if paths match.
    */
-  #isPathnameMatch(path1, path2) {
-    return path1.replaceAll('/', '') === path2.replaceAll('/', '');
+  #arePathsMatching(pathA, pathB) {
+    return pathA.replaceAll('/', '') === pathB.replaceAll('/', '');
   }
 
   /**
    * Checks for a 410 Gone status.
    * @returns {Response | undefined} - A 410 response if matched, otherwise undefined.
    */
-  #check410() {
-    const matched = list410.find((url) =>
-      this.#isPathnameMatch(url, this.pathname)
+  #handleGoneStatus() {
+    const matched = goneList.find((path) =>
+      this.#arePathsMatching(path, this.fullPath)
     );
     if (matched) {
       return new Response(page410, { status: 410 });
@@ -39,13 +39,14 @@ class ServerStatuses {
    * Checks for a 301 Redirect status.
    * @returns {Response | undefined} - A 301 redirect response if matched, otherwise undefined.
    */
-  #check301() {
-    const matched = list301.find(({ from }) =>
-      this.#isPathnameMatch(from, this.pathname)
+  #handleRedirectStatus() {
+    const matched = redirectList.find(({ from }) =>
+      this.#arePathsMatching(from, this.fullPath)
     );
+
     if (matched) {
-      const redirectURL = new URL(matched.to, this.url.origin);
-      return Response.redirect(redirectURL.href, 301);
+      const redirectUrl = new URL(matched.to, this.url.origin);
+      return Response.redirect(redirectUrl.href, 301);
     }
   }
 
@@ -53,9 +54,9 @@ class ServerStatuses {
    * Checks the URL for 301 or 410 statuses.
    * @returns {Response | undefined} - A response if a status is matched, otherwise undefined.
    */
-  checkUrlStatuses() {
-    return this.#check301() || this.#check410();
+  checkHttpStatus() {
+    return this.#handleRedirectStatus() || this.#handleGoneStatus();
   }
 }
 
-export default ServerStatuses;
+export default HttpStatusHandler;
